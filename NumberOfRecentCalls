@@ -1,59 +1,39 @@
 class RecentCounter {
-    int[] counterArr;
+    ArrayList<Integer> recentList;
     public RecentCounter() {
-        counterArr = new int [100000000]; 
+        recentList = new ArrayList<>();
     }
     
     public int ping(int t) {
-        counterArr[t] = 1;
-        if (t == 1) {
-            return 1;
-        }
+        recentList.add(t);
         int count = 0;
-        int idx = t - 3000;
-        if (idx < 0) {
-            idx = 1;
+        int mid = 420;
+        int low = 0;
+
+        int high = recentList.size() - 1;
+        while (low <= high) {
+            mid = low + (high - low / 2);
+            if (recentList.get(mid) == t) {
+                break;
+            }
+            else if (recentList.get(mid) > t) {
+                low = mid + 1;          
+            }
+            else {
+                high = mid - 1;
+            }
         }
-        while (idx <= t) {
-            if (counterArr[idx] == 1) count++;
-            idx++;
-        }
-        return count;
         
-    }
-}
-
-/**
- * Your RecentCounter object will be instantiated and called as such:
- * RecentCounter obj = new RecentCounter();
- * int param_1 = obj.ping(t);
- */
- 
- class RecentCounter {
-    PriorityQueue<Integer> pq;
-    public RecentCounter() {
-        pq = new PriorityQueue<>((a,b) -> b - a);
-    }
-    
-    public int ping(int t) {
-        pq.add(t);
-        if (pq.size() == 1) {
-            return 1;
-        }
-        int count = 0;
-        PriorityQueue<Integer> pqCopy = new PriorityQueue<>(pq);
-        while (pqCopy.peek() != t) {    // remove elements until t is on top;
-            pqCopy.poll();
-        }
-
-        while (!pqCopy.isEmpty() && pqCopy.peek() >= t - 3000) {
+        while (mid >= 0 && recentList.get(mid) >= t - 3000) {
             count++;
-            pqCopy.poll();
+            mid--;
         }
         return count;
         
     }
+    // 1 5 7 9 10  
 }
+
 
 /**
  * Your RecentCounter object will be instantiated and called as such:
