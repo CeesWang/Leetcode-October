@@ -1,0 +1,20 @@
+class Solution {
+    public int findPairs(int[] nums, int k) {
+        int pairs = 0;
+        Map<Integer,Integer> complimentMap = new HashMap<>();
+        Set<Integer> set = new HashSet<>();
+        
+        for (int i = 0; i < nums.length; ++i) {
+            complimentMap.put(nums[i] + k, i);
+        }
+        for (int i = 0; i < nums.length; ++i) {
+            int num = nums[i];
+            if (complimentMap.containsKey(num) && complimentMap.get(num) != i && !set.contains(num)) {
+                set.add(num);
+                pairs++;
+            }
+        }
+        
+        return pairs;
+    }
+}
