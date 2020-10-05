@@ -1,0 +1,16 @@
+class Solution {
+    public int bitwiseComplement(int num) {
+        String binary = Integer.toString(num,2);
+        int complement = 0;
+        int counter = 1;
+        
+        for (int i = binary.length() - 1; i >= 0; --i) {
+            char c = binary.charAt(i);
+            if (c == '0') {
+                complement += counter;            
+            }
+            counter *= 2;
+        }
+        return complement;
+    }
+}
