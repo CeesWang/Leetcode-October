@@ -1,0 +1,74 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        if (root == null) {
+            return "";
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        StringBuilder sb = new StringBuilder();
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; ++i) {
+                TreeNode node = queue.poll();
+                if (node == null) {
+                    sb.append("N");
+                }
+                else { // node is not null
+                    sb.append(node.val);
+                    queue.add(node.left);
+                    queue.add(node.right);
+                }
+                sb.append(",");
+            }
+        }
+        return sb.toString();
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        if (data.isEmpty()) {
+            return null;
+        }
+        String [] splittedArr = data.split(",");
+        int len = splittedArr.length;
+        Queue<TreeNode> queue = new LinkedList<>();
+        TreeNode root = new TreeNode(Integer.parseInt(splittedArr[0]));
+        queue.add(root);
+
+        for (int i = 1; i < len; ++i) {
+            TreeNode parent = queue.poll();
+            if (!splittedArr[i].equals("N")) {
+                TreeNode left = new TreeNode(Integer.parseInt(splittedArr[i]));
+                parent.left = left;
+                queue.add(left);
+            }
+            ++i;
+            if (i < len && !splittedArr[i].equals("N")) {
+                TreeNode right = new TreeNode(Integer.parseInt(splittedArr[i]));
+                parent.right = right;
+                queue.add(right);
+            }
+        }
+        // System.out.println(Arrays.toString(splittedArr));
+        return root;
+    }
+}
+
+// 10,5,20,1,7
+// Your Codec object will be instantiated and called as such:
+// Codec ser = new Codec();
+// Codec deser = new Codec();
+// String tree = ser.serialize(root);
+// TreeNode ans = deser.deserialize(tree);
+// return ans;
