@@ -3,21 +3,37 @@ class Solution {
         if (A.length() != B.length()) {
             return false;
         }
+        int mismatches = 0;
         int len = A.length();
-        for (int i = 0; i < len-1; ++i) {   
-            for (int j = i + 1; j < len; ++j) {
-                if (isMatchAfterSwapping(A,B,i,j)) {
+        int [] countArr = new int [26];
+        ArrayList<Integer> mismatchList = new ArrayList<>();
+        for (int i = 0; i < len; ++i) {
+            char c = A.charAt(i);
+            char d = B.charAt(i);
+            if (c != d) {
+                mismatchList.add(i);
+                mismatches++;
+                if (mismatches > 2) {   // mismatch > 2
+                    return false;
+                }
+            }
+            countArr[c - 'a']++;
+            countArr[d - 'a']++;
+        }
+        if (mismatches == 0) {          // mismatch 0
+            for (int count : countArr) {
+                if (count > 2) {
                     return true;
                 }
             }
+            return false;
         }
-        return false;
-    }
-    
-    public boolean isMatchAfterSwapping (String A, String B, int idxA, int idxB) {
-        StringBuilder sb = new StringBuilder(A); 
-        sb.setCharAt(idxA, A.charAt(idxB)); 
-        sb.setCharAt(idxB, A.charAt(idxA)); 
-        return sb.toString().equals(B);
+        if (mismatches == 1) {          // mismatch 1
+           return false; 
+        }
+                                        // mismatches 2
+        int mismatchIdx1 = mismatchList.get(0);
+        int mismatchIdx2 = mismatchList.get(1);
+        return A.charAt(mismatchIdx1) == B.charAt(mismatchIdx2) && A.charAt(mismatchIdx2) == B.charAt(mismatchIdx1);
     }
 }
