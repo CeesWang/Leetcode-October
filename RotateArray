@@ -1,0 +1,24 @@
+class Solution {
+    public void rotate(int[] nums, int k) {
+        if (k == 0) {
+            return;
+        }
+        int len = nums.length;
+        k = k % len;
+        for (int i = 0; i < len / 2; ++i) {
+            swap(nums,i, len - 1 - i);
+        }
+        for (int i = 0; i < k / 2; ++i) {
+            swap(nums, i, k - 1 - i);
+        }
+        for (int i = 0; i < (len - k)/ 2 ; ++i) {
+            swap(nums, i + k, len - 1 - i);
+        }
+    }
+    
+    public void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
