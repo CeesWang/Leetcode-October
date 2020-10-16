@@ -1,0 +1,38 @@
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return false;
+        }
+        if (matrix.length == 1) {
+            return binarySearch(matrix[0], 0, matrix[0].length - 1, target);
+        }
+        int idx = 0;
+        for (int i = 0; i < matrix.length; ++i) {
+            if (matrix[i][matrix[i].length - 1] == target) {
+                return true;
+            }
+            if (matrix[i][matrix[i].length - 1] > target) {
+               return binarySearch(matrix[i], 0, matrix[i].length - 1, target); 
+            }
+                
+        }
+        return false;
+    }
+    
+    
+    public boolean binarySearch (int[] matrix, int low, int high, int target) {
+        while (low <= high) {
+            int mid = low + (high - low) / 2; 
+            if (matrix[mid] == target) {
+                return true;
+            }
+            else if (matrix[mid] > target){
+                high = mid - 1;
+            }
+            else {
+                low = mid + 1;
+            }
+        }
+        return false;
+    }
+}
