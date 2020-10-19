@@ -1,38 +1,22 @@
 class Solution {
     public int minDominoRotations(int[] A, int[] B) {
-        if (A.length == 1) {
-            return 1;
-        }
-        int rotationsA = 0;
-        int rotationsB = 0;
-        int prev = A[0];
-        boolean isEqualRow= true;
-        for (int i = 1; i < A.length; ++i) {
-            if (A[i] != prev) {
-                if (B[i] == prev) {
-                    ++rotationsA;
-                }
-                else {                  // first row can't be equal 
-                    rotationsA = -1;
-                    isEqualRow = false;
-                    break;
-                }
+        int [] countA = new int [7];
+        int [] countB = new int [7];
+        int [] same = new int [7];
+        for (int i = 0; i < A.length; ++i) {
+            if (A[i] == B[i]) {
+                same[A[i]]++;
+            }
+            else {
+                countA[A[i]]++;
+                countB[B[i]]++;
             }
         }
-        if (isEqualRow && A[0] != B[0]) {     // row A is equal and B is not means we return answer     
-            return rotationsA;
-        }
-        prev = B[0];
-        for (int i = 1; i < B.length; ++i) {
-            if (B[i] != prev) {
-                if (A[i] == prev) {
-                    ++rotationsB;
-                }
-                else {
-                    return -1;
-                }
+        for (int i = 1; i < countA.length; ++i) {
+            if ( (countA[i] + countB[i] + same[i]) == A.length) {
+                return Math.min(countA[i], countB[i]);
             }
-        }   
-        return rotationsA == -1 ? rotationsB : Math.min(rotationsA, rotationsB);
+        }
+        return -1;
     }
 }
