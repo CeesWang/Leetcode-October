@@ -3,39 +3,36 @@ class Solution {
         if (A.length == 1) {
             return 1;
         }
-        int rotations = 0;
-        int len = A.length;
+        int rotationsA = 0;
+        int rotationsB = 0;
         int prev = A[0];
-        int idx = 1;
-        while (idx < len) {
-            if (A[idx] != prev) {
-                if (B[idx] == prev) {
-                    ++rotations;        
+        boolean isEqualRow= true;
+        for (int i = 1; i < A.length; ++i) {
+            if (A[i] != prev) {
+                if (B[i] == prev) {
+                    ++rotationsA;
                 }
-                else {
+                else {                  // first row can't be equal 
+                    rotationsA = -1;
+                    isEqualRow = false;
                     break;
                 }
             }
-            idx++;
         }
-        if (idx == len) {
-            return rotations;
+        if (isEqualRow && A[0] != B[0]) {     // row A is equal and B is not means we return answer     
+            return rotationsA;
         }
-        rotations = 0;
         prev = B[0];
-        idx = 1;
-        while (idx < len) {
-
-            if (B[idx] != prev) {
-                if (A[idx] == prev) {
-                    ++rotations;        
+        for (int i = 1; i < B.length; ++i) {
+            if (B[i] != prev) {
+                if (A[i] == prev) {
+                    ++rotationsB;
                 }
                 else {
-                    break;
+                    return -1;
                 }
             }
-            idx++;
-        }
-        return idx == len ? rotations : -1;
+        }   
+        return rotationsA == -1 ? rotationsB : Math.min(rotationsA, rotationsB);
     }
 }
