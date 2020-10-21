@@ -1,40 +1,29 @@
 class Solution {
     public int[] asteroidCollision(int[] asteroids) {
         ArrayList<Integer> list = new ArrayList<>();
-        
+        Stack<Integer> stack = new Stack<>();
         for (int i = 0; i < asteroids.length; ++i) {
             int currAsteroid = asteroids[i];
-            if (currAsteroid > 0) {             // going right 
-                list.add(currAsteroid);
+            if (currAsteroid > 0) {
+                stack.add(currAsteroid);
             }
-            else {                              // going left, possible collision;
-                if (list.size() == 0) {     // all asteroids in list are going left     
-                    list.add(currAsteroid);
+            else {
+                while(!stack.isEmpty() && stack.peek() > 0 && currAsteroid < stack.peek()) {
+                    stack.pop();
                 }
-                else {
-                    int prevAsteroid = list.get(list.size() -1);
-                    while (list.size() > 0 && prevAsteroid + currAsteroid <= 0) {
-                        if (currAsteroid < 0 && prevAsteroid < 0) {
-                            list.add(currAsteroid);
-                            break;
-                        }
-                        if (currAsteroid + prevAsteroid == 0) {              // asteroid same size blow em both up 
-                            list.remove(list.size() -1);
-                            break;
-                        }
-                        list.remove(list.size() -1);
-                        prevAsteroid = list.size() != 0 ? list.get(list.size() -1) : 1001;
-                    }
-                    if (list.size() == 0 && currAsteroid + prevAsteroid != 0) {
-                        list.add(currAsteroid);
-                    }
+                if (stack.isEmpty() || stack.peek() < 0) {
+                    stack.push(currAsteroid);
                 }
+                else if (stack.peek() + currAsteroid == 0) {
+                    stack.pop();
+                }
+                
             }
         }
-        int [] arr = new int [list.size()];
-        for (int i = 0; i < arr.length; ++i) {
-            arr[i] = list.get(i);
+        int [] arr = new int [stack.size()];
+        for (int i = arr.length - 1; i >= 0; --i) {
+            arr[i] = stack.pop();
         }
         return arr;
     }
-}// -2 -2 1 -2               prev -2 + -2 A
+}// -2 -2 1 -2               prev -2 + -2 
