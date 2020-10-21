@@ -24,18 +24,47 @@ class Node {
 class Solution {
     public Node cloneGraph(Node node) {
         if (node == null) {
-            return null;
+            return node;
         }
-        List<List<Node>>> listNeighbors = new ArrayList<>(); // list of list nodes
-    
-        List<Node> listOfNodes = new arrayList<>();
-            
-        while (node != null) {
-            Node newNode = new Node(node.val)
-            node = 
+        boolean [] visited = new boolean [101];
+        HashMap<Integer, Node> nodeMap = new HashMap<>();
+        HashMap<Integer, List<Node>> neighborMap = new HashMap<>();
+        Queue<Node> queue = new LinkedList<>();        
+        Node temp = null;
+        visited[1] = true;
+        queue.add(node);
+        nodeMap.put(1, new Node(1));
+        while (!queue.isEmpty()) {          // iterate over connected graph 
+            temp = queue.poll();
+            visited[temp.val] = true;           
+            int size = temp.neighbors.size();
+            for (int i = 0; i < size; ++i ) {
+                Node neighbor = temp.neighbors.get(i);
+                if (!visited[neighbor.val]) {
+                    nodeMap.put(neighbor.val, new Node(neighbor.val));
+                    queue.add(neighbor);
+                }
+            }
+            neighborMap.put(temp.val, temp.neighbors);
         }
-        
-        return listOfNodes.get(0);
+        for (int i = 1; i < visited.length; ++i) {
+            if (visited[i]) {
+                ArrayList<Node> neighborList = new ArrayList<>();
+                List<Node> visitedNeighbor = neighborMap.get(i);
+                for (int j = 0; j < visitedNeighbor.size(); ++j) {
+                    int neighborVal = visitedNeighbor.get(j).val;
+                    neighborList.add(nodeMap.get(neighborVal));
+                }
+                nodeMap.get(i).neighbors = neighborList;
+            }
+        }
+        // for (Map.Entry<Integer, Node> entry : nodeMap.entrySet()) {
+        //     System.out.println(entry.getKey() + "  " + entry.getValue().neighbors);
+        // }
+        // for (Map.Entry<Integer, List<Node>> entry : neighborMap.entrySet()) {
+        //     System.out.println(entry.getKey() + "  " + entry.getValue());
+        // }
 
+        return nodeMap.get(1);
     }
 }
